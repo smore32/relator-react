@@ -170,10 +170,13 @@ export default function CreateListing() {
       userRef: auth.currentUser.uid,
     };
     delete formDataCopy.images;
-    delete formDataCopy.discountedPrice;
+    //delete formDataCopy.discountedPrice;
     delete formDataCopy.latitude;
     delete formDataCopy.longitude;
-    !formDataCopy.offer && delete formDataCopy.discountedPrice;
+    //!formDataCopy.offer && delete formDataCopy.discountedPrice;
+    if(formDataCopy.offer=="false"){
+      delete formDataCopy.discountedPrice        
+    }
     //console.log(formData,"Data");
     const docRef = await addDoc(collection(db, "listing"), formDataCopy);
     setLoading(false);
@@ -458,6 +461,7 @@ export default function CreateListing() {
                 <input
                   type="number"
                   id="discountedPrice"
+                  name="discountedPrice"
                   value={discountedPrice}
                   onChange={onChange}
                   min="50"
