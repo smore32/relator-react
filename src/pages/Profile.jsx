@@ -7,6 +7,7 @@ import {
   where,
   orderBy,
   getDocs,
+  deleteDoc,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
@@ -83,6 +84,23 @@ export default function Profile() {
     fetchUserListing();
   }, [auth.currentUser.uid]);
 
+   async function onDelete(listingId){
+    if(window.confirm("Are you sure you want to delete?")){
+      await deleteDoc(doc(db,"listings",listingId));
+      const updatedListings = listings.filter(
+        (listing) => listing.id !== listingId
+      );
+      setListings(updatedListings);
+      toast.success("Succefully deleted  the listing");
+    }
+
+    navigate(`/delete-listing/${listingId}`);
+   } 
+   function onEdit(listingId){
+    navigate(`/edit-listing/${listingId}`);
+   } 
+
+
   return (
     <>
       <section className="max-w-6xl mx-auto flex justify-center items-center flex-col">
@@ -155,6 +173,8 @@ export default function Profile() {
                   key={listing.id}
                   id={listing.id}
                   listing={listing.data}
+                  onDelete={()=>onDelete(listing.id)}
+                  onEdit={()=>onEdit(listing.id)}
                 />
               ))}
             </ul>
