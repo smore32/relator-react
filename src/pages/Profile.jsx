@@ -77,7 +77,7 @@ export default function Profile() {
           data: doc.data(),
         });
       });
-      console.log(listings, "list");
+    
       setListings(listings);
       setLoading(false);
     }
@@ -86,15 +86,16 @@ export default function Profile() {
 
    async function onDelete(listingId){
     if(window.confirm("Are you sure you want to delete?")){
-      await deleteDoc(doc(db,"listings",listingId));
+      
+      await deleteDoc(doc(db,"listing",listingId));
       const updatedListings = listings.filter(
-        (listing) => listing.id !== listingId
+        (listings) => listings.id !== listingId
       );
       setListings(updatedListings);
       toast.success("Succefully deleted  the listing");
     }
 
-    navigate(`/delete-listing/${listingId}`);
+    //navigate(`/delete-listing/${listingId}`);
    } 
    function onEdit(listingId){
     navigate(`/edit-listing/${listingId}`);
