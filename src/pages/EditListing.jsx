@@ -14,6 +14,7 @@ import {
   collection,
   getDoc,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -59,6 +60,12 @@ export default function EditListing() {
   } = formData;
 
   const params = useParams();
+  useEffect(()=>{
+    if(listing && listing.userRef !== auth.currentUser.uid){
+        toast.error("You can't edit this listing.");
+        navigate("/");    
+    }
+  },[auth.currentUser.uid,listing,navigate]);
   useEffect(() => {
     setLoading(true);
     async function fetchListing() {
@@ -75,7 +82,9 @@ export default function EditListing() {
       }
     }
     fetchListing();
-  }, []);
+  }, [navigate,params.listingId]);
+
+ 
 
   function onChange(e) {
     let boolean = null;
@@ -204,9 +213,10 @@ export default function EditListing() {
       delete formDataCopy.discountedPrice;
     }
     //console.log(formData,"Data");
-    const docRef = await addDoc(collection(db, "listing"), formDataCopy);
+    const docRef = doc(db, "listing",params.listingId);
+    await updateDoc(docRef, formDataCopy);
     setLoading(false);
-    toast.success("Listing created");
+    toast.success("Listing Edited");
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   }
 
@@ -215,7 +225,7 @@ export default function EditListing() {
   }
   return (
     <main className="max-w-md px-2 mx-auto">
-      <h1 className="text-3xl text-center mt-6 font-bold">Create a Listing</h1>
+      <h1 className="text-3xl text-center mt-6 font-bold">Edit a Listing</h1>
       <form onSubmit={onSubmit}>
         <p className="text-lg mt-6 font-semibold">Sell /Rent</p>
         <div className="flex">
@@ -522,7 +532,7 @@ export default function EditListing() {
         uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 
         focus:shadow-lg active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
         >
-          Create Listing
+          Edit Listing
         </button>
       </form>
     </main>
