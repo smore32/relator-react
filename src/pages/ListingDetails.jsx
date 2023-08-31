@@ -123,7 +123,7 @@ export default function ListingDetails() {
                 className="bg-green-800 w-full max-w-[2000px] rounded-md p-1
               text-white text-center font-semibold shadow-md"
               >
-                ${listing.regularPrice - listing.discountedPrice} discount
+                ${listing.regularPrice - listing.discountedPrice} Discount
               </p>
             )}
           </div>
@@ -184,9 +184,7 @@ export default function ListingDetails() {
             <Marker
               position={[listing.geolocation.lat, listing.geolocation.lng]}
             >
-              <Popup>
-                A pretty CSS3 popup. <br /> Easily customizable.
-              </Popup>
+              
             </Marker>
           </MapContainer>
         </div>
