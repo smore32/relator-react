@@ -70,6 +70,7 @@ export default function Slider() {
                 {data.discountedPrice ?? data.regularPrice}
                 {data.type === "rent" && " /month"}
               </p>
+              
             </SwiperSlide>
           ))}
         </Swiper>
